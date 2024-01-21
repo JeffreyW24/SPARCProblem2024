@@ -1,7 +1,6 @@
 import random
 import matplotlib.pyplot as plt
 
-
 def picksmall(queue):
     if len(queue) == 0:
         return 2
@@ -12,13 +11,11 @@ def picksmall(queue):
     else:
         return 0
 
-
 def lastComeLastServe(queue):
     if len(queue) == 0:
         return 2
-
-    return queue[len(queue) - 1]
-
+    
+    return queue[len(queue)-1]
 
 def picklarge(queue):
     if len(queue) == 0:
@@ -30,12 +27,10 @@ def picklarge(queue):
     else:
         return 1
 
-
 def firstComeFirstServe(queue):
     if len(queue) == 0:
         return 2
     return queue[0]
-
 
 def run_simulation(strategy_func, limit):
     queue = []
@@ -72,29 +67,30 @@ def run_simulation(strategy_func, limit):
 
     return processed
 
-
 def run_multiple_simulations(strategy_func, num_simulations, limit):
     results = []
     for _ in range(num_simulations):
         results.append(run_simulation(strategy_func, limit))
     return results
 
-
-def plot_results(results_small, results_lcls):
+def plot_results(results_small, results_lcls, results_large, results_fcfs):
     plt.plot(results_small, label='picksmall()', marker='o')
     plt.plot(results_lcls, label='lastComeLastServe()', marker='o')
+    plt.plot(results_large, label='picklarge()', marker='o')
+    plt.plot(results_fcfs, label='firstComeFirstServe()', marker='o')
     plt.title('Simulation Results')
     plt.xlabel('Simulation')
     plt.ylabel('Customers Processed')
     plt.legend()
     plt.show()
 
-
 if __name__ == "__main__":
     num_simulations = 100
-    limit = 80000
+    limit = 20000
 
     results_small = run_multiple_simulations(picksmall, num_simulations, limit)
     results_lcls = run_multiple_simulations(lastComeLastServe, num_simulations, limit)
+    results_large = run_multiple_simulations(picklarge, num_simulations, limit)
+    results_fcfs = run_multiple_simulations(firstComeFirstServe, num_simulations, limit)
 
-    plot_results(results_small, results_lcls)
+    plot_results(results_small, results_lcls, results_large, results_fcfs)
