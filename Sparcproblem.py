@@ -1,7 +1,7 @@
 import random
 import matplotlib.pyplot as plt
 
-def picksmall(queue):
+def picksmall(queue): #this strategy picks the small baskets first until the queue is all large baskets
     if len(queue) == 0:
         return 2
     if all(element == 0 for element in queue):
@@ -11,13 +11,13 @@ def picksmall(queue):
     else:
         return 0
 
-def lastComeLastServe(queue):
+def lastComeLastServe(queue): #this strategy picks the last person in the queue
     if len(queue) == 0:
         return 2
     
     return queue[len(queue)-1]
 
-def picklarge(queue):
+def picklarge(queue): #this strategy picks the large baskets first
     if len(queue) == 0:
         return 2
     if all(element == 0 for element in queue):
@@ -27,27 +27,27 @@ def picklarge(queue):
     else:
         return 1
 
-def firstComeFirstServe(queue):
+def firstComeFirstServe(queue): #this strategy is what current queues do
     if len(queue) == 0:
         return 2
     return queue[0]
 
 def run_simulation(strategy_func, limit):
-    queue = []
-    time = 1
-    processed = 0
-    processing = 0
+    queue = [] #queue starts empty
+    time = 1 #this counter tracks time (each unit is 30 seconds)
+    processed = 0 #counts how many customers have been processed
+    processing = 0 #used to keep track of if the cashier is processing a customer
 
-    while time <= limit:
-        if time % 2 == 0:
+    while time <= limit: #simulates time
+        if time % 2 == 0: #adds a customer to the queue
             temp = random.randint(1, 10)
             if temp == 1:
                 queue.append(1)
             else:
                 queue.append(0)
 
-        if processing == 0:
-            current_customer = strategy_func(queue)
+        if processing == 0: #if not busy
+            current_customer = strategy_func(queue) #uses one of the above strategies
 
             if current_customer == 0:
                 queue.remove(0)
@@ -58,7 +58,7 @@ def run_simulation(strategy_func, limit):
             else:
                 pass
 
-        if processing != 0:
+        if processing != 0: #if processing a large basket, decreases the remaining time
             processing -= 1
             if processing == 0:
                 processed += 1
@@ -85,8 +85,8 @@ def plot_results(results_small, results_lcls, results_large, results_fcfs):
     plt.show()
 
 if __name__ == "__main__":
-    num_simulations = 100
-    limit = 20000
+    num_simulations = 100 #number of simulations
+    limit = 20000 #amount of time during simulations
 
     results_small = run_multiple_simulations(picksmall, num_simulations, limit)
     results_lcls = run_multiple_simulations(lastComeLastServe, num_simulations, limit)
